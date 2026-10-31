@@ -1,0 +1,61 @@
+name: Build KRYPT AUDIO iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - ios-support
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios:
+    name: Build unsigned iOS app
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.7'
+          channel: stable
+          cache: true
+
+      - name: Set up CocoaPods
+        uses: maxim-lobanov/setup-cocoapods@v1
+        with:
+          pod-version: latest
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Generate localization files
+        run: flutter gen-l10n
+
+      - name: Install iOS pods
+        working-directory: ios
+        run: pod install --repo-update
+
+      - name: Analyze Flutter source
+        run: flutter analyze --no-fatal-infos
+
+      - name: Build unsigned iOS app
+        run: flutter build ios --release --no-codesign
+
+      - name: Package unsigned app
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            build/ios/iphoneos/Runner.app \
+            build/ios/iphoneos/KRYPT-AUDIO-unsigned.app.zip
+
+      - name: Upload unsigned iOS app
+        uses: actions/upload-artifact@v5
+        with:
+          name: KRYPT-AUDIO-ios-unsigned
+          path: build/ios/iphoneos/KRYPT-AUDIO-unsigned.app.zip
+          if-no-files-found: error
+          retention-days: 30
