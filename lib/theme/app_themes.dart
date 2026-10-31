@@ -22,6 +22,7 @@
 import 'package:flutter/scheduler.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:musify/services/settings_manager.dart';
+import 'package:musify/services/plugin_service.dart';
 import 'package:musify/theme/app_colors.dart';
 
 ThemeMode themeMode = getThemeMode(themeModeSetting);
@@ -54,16 +55,17 @@ ColorScheme getAppColorScheme(
       ? lightColorScheme
       : darkColorScheme;
 
-  if (useSystemColor.value && selectedScheme != null) {
-    return selectedScheme;
-  } else {
-    return ColorScheme.fromSeed(
-      seedColor: primaryColorSetting == const Color(0xFF009688)
-          ? kryptViolet
-          : primaryColorSetting,
-      brightness: brightness,
-    );
-  }
+  final baseScheme = useSystemColor.value && selectedScheme != null
+      ? selectedScheme
+      : ColorScheme.fromSeed(
+          seedColor: primaryColorSetting == const Color(0xFF009688)
+              ? kryptViolet
+              : primaryColorSetting,
+          brightness: brightness,
+        );
+  final primary = _pluginColor('--krypt-primary');
+  final secondary = _pluginColor('--krypt-secondary');
+  return baseScheme.copyWith(primary: primary, secondary: secondary);
 }
 
 ThemeData getAppTheme(ColorScheme colorScheme) {
@@ -83,11 +85,15 @@ ThemeData getAppTheme(ColorScheme colorScheme) {
 
   final bgColor = isLight
       ? colorScheme.surface
-      : (isPureBlack ? pureBlack : kryptDeepSpace);
+      : (isPureBlack
+            ? pureBlack
+            : (_pluginColor('--krypt-background') ?? kryptDeepSpace));
 
   final cardBgColor = isLight
       ? colorScheme.surfaceContainerLow
-      : (isPureBlack ? pureBlackElevated : kryptGlass);
+      : (isPureBlack
+            ? pureBlackElevated
+            : (_pluginColor('--krypt-surface') ?? kryptGlass));
 
   // modified color scheme for pure black theme
   final effectiveColorScheme = isPureBlack
@@ -258,4 +264,15 @@ ThemeData getAppTheme(ColorScheme colorScheme) {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     useMaterial3: true,
   );
+}
+
+Color? _pluginColor(String token) {
+  final value = KryptPluginService.instance.themeTokens[token]?.replaceFirst(
+    '#',
+    '',
+  );
+  if (value == null) return null;
+  final normalized = value.length == 6 ? 'ff$value' : value;
+  final integer = int.tryParse(normalized, radix: 16);
+  return integer == null ? null : Color(integer);
 }

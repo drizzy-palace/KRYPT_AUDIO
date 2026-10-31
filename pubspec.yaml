@@ -5,13 +5,14 @@ repository: https://github.com/gokadzev/Musify
 issue_tracker: https://github.com/gokadzev/Musify/issues
 
 publish_to: 'none'
-version: 1.0.0+1 # run update.sh after changing the version
+version: 1.0.1+2 # run update.sh after changing the version
 
 environment:
   sdk: '>=3.13.0 <4.0.0'
   flutter: ^3.47.7
 
 dependencies:
+  archive: ^4.0.7
   app_links: ^7.2.2
   audio_service: ^0.18.19
   audio_session: ^0.2.4

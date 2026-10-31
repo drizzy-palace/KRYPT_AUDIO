@@ -563,8 +563,15 @@ class SettingsPage extends StatelessWidget {
         CustomBar(
           context.l10n!.about,
           FluentIcons.book_information_24_regular,
-          borderRadius: commonCustomBarRadiusLast,
           onTap: () => NavigationManager.router.go('/settings/about'),
+        ),
+        CustomBar(
+          'Plugin Marketplace',
+          FluentIcons.puzzle_cube_24_filled,
+          description:
+              'Personalise KRYPT AUDIO with community plugins and themes.',
+          borderRadius: commonCustomBarRadiusLast,
+          onTap: () => NavigationManager.router.go('/settings/plugins'),
         ),
       ],
     );

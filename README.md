@@ -5,6 +5,15 @@
 
 A premium, open-source music streaming experience by Synapse Labs UK Ltd.
 
+## V1.0.1 plugin system
+
+KRYPT AUDIO supports community `.kryptplugin` packages. The built-in
+marketplace reads `index.json` from this repository's `plugins` branch. Each
+package is a ZIP archive with the custom `.kryptplugin` extension and contains
+`manifest.json`, `plugin.js`, and `theme.css`. Themes can use the documented
+`--krypt-*` CSS tokens. Open **Settings → Plugin Marketplace → Plugin guide** in
+the app for the complete author tutorial and permission guidance.
+
 [![Stars](https://img.shields.io/github/stars/gokadzev/Musify?style=flat-square&color=D3BEAB)](https://github.com/gokadzev/Musify/stargazers)
 [![Forks](https://img.shields.io/github/forks/gokadzev/Musify?style=flat-square&color=D3BEAB)](https://github.com/gokadzev/Musify/fork)
 [![Downloads](https://img.shields.io/github/downloads/gokadzev/Musify/total?style=flat-square&color=D3BEAB)](https://github.com/gokadzev/Musify/releases)

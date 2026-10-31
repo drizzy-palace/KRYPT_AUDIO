@@ -34,6 +34,8 @@ import 'package:musify/screens/import_spotify_playlist_page.dart';
 import 'package:musify/screens/library_page.dart';
 import 'package:musify/screens/playlist_folder_page.dart';
 import 'package:musify/screens/playlist_page.dart';
+import 'package:musify/screens/plugin_guide_page.dart';
+import 'package:musify/screens/plugin_marketplace_page.dart';
 import 'package:musify/screens/radio_stations_page.dart';
 import 'package:musify/screens/search_page.dart';
 import 'package:musify/screens/settings_page.dart';
@@ -285,6 +287,18 @@ class NavigationManager {
                 path: 'donate',
                 pageBuilder: (context, state) =>
                     _pushPage(child: const DonationPage(), state: state),
+              ),
+              GoRoute(
+                path: 'plugins',
+                pageBuilder: (context, state) => _pushPage(
+                  child: const PluginMarketplacePage(),
+                  state: state,
+                ),
+              ),
+              GoRoute(
+                path: 'plugins/guide',
+                pageBuilder: (context, state) =>
+                    _pushPage(child: const PluginGuidePage(), state: state),
               ),
               GoRoute(
                 path: 'equalizer',

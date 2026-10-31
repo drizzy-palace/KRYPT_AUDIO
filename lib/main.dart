@@ -41,6 +41,7 @@ import 'package:musify/services/listening_stats_service.dart';
 import 'package:musify/services/logger_service.dart';
 import 'package:musify/services/playlist_sharing.dart';
 import 'package:musify/services/playlists_manager.dart';
+import 'package:musify/services/plugin_service.dart';
 import 'package:musify/services/router_service.dart';
 import 'package:musify/services/settings_manager.dart';
 import 'package:musify/services/update_manager.dart';
@@ -242,42 +243,45 @@ class _MusifyState extends State<Musify> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicColorBuilder(
-      builder: (lightColorScheme, darkColorScheme) {
-        final colorScheme = getAppColorScheme(
-          lightColorScheme,
-          darkColorScheme,
-        );
+    return AnimatedBuilder(
+      animation: KryptPluginService.instance,
+      builder: (context, _) => DynamicColorBuilder(
+        builder: (lightColorScheme, darkColorScheme) {
+          final colorScheme = getAppColorScheme(
+            lightColorScheme,
+            darkColorScheme,
+          );
 
-        return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            systemNavigationBarColor: Colors.transparent,
-            systemNavigationBarContrastEnforced: true,
-            statusBarBrightness: brightness == Brightness.dark
-                ? Brightness.light
-                : Brightness.dark,
-            statusBarIconBrightness: brightness == Brightness.dark
-                ? Brightness.light
-                : Brightness.dark,
-            systemNavigationBarIconBrightness: brightness == Brightness.dark
-                ? Brightness.light
-                : Brightness.dark,
-          ),
-          child: MaterialApp.router(
-            themeMode: themeMode,
-            darkTheme: getAppTheme(colorScheme),
-            theme: getAppTheme(colorScheme),
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              ...GlobalMaterialLocalizations.delegates,
-            ],
-            supportedLocales: appSupportedLocales,
-            locale: languageSetting,
-            routerConfig: NavigationManager.router,
-          ),
-        );
-      },
+          return AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              systemNavigationBarColor: Colors.transparent,
+              systemNavigationBarContrastEnforced: true,
+              statusBarBrightness: brightness == Brightness.dark
+                  ? Brightness.light
+                  : Brightness.dark,
+              statusBarIconBrightness: brightness == Brightness.dark
+                  ? Brightness.light
+                  : Brightness.dark,
+              systemNavigationBarIconBrightness: brightness == Brightness.dark
+                  ? Brightness.light
+                  : Brightness.dark,
+            ),
+            child: MaterialApp.router(
+              themeMode: themeMode,
+              darkTheme: getAppTheme(colorScheme),
+              theme: getAppTheme(colorScheme),
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                ...GlobalMaterialLocalizations.delegates,
+              ],
+              supportedLocales: appSupportedLocales,
+              locale: languageSetting,
+              routerConfig: NavigationManager.router,
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -299,6 +303,7 @@ Future<void> initialisation() async {
       Hive.openBox('userNoBackup'),
       Hive.openBox('cache'),
     ]);
+    await KryptPluginService.instance.initialize();
 
     if (isMobilePlatform) {
       audioHandler = await AudioService.init(
