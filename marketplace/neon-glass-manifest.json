@@ -1,0 +1,13 @@
+{
+  "id": "neon-glass",
+  "name": "Neon Glass",
+  "version": "1.0.0",
+  "description": "A violet and electric-blue glass theme for KRYPT AUDIO.",
+  "author": "Synapse Labs UK Ltd",
+  "minAppVersion": "1.0.1",
+  "entryScript": "plugin.js",
+  "stylesheet": "theme.css",
+  "permissions": [],
+  "downloadUrl": "https://raw.githubusercontent.com/drizzy-palace/KRYPT_AUDIO/plugins/packages/neon-glass.kryptplugin",
+  "repositoryUrl": "https://github.com/drizzy-palace/KRYPT_AUDIO"
+}
